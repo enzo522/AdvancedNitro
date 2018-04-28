@@ -23,7 +23,25 @@ namespace AdvancedNitro
 
         public AdvancedNitro()
         {
-            exhausts = new List<string> { "exhaust", "exhaust_2", "exhaust_3", "exhaust_4", "exhaust_5", "exhaust_6", "exhaust_7", "exhaust_8", "exhaust_9", "exhaust_10", "exhaust_11", "exhaust_12" };
+            exhausts = new List<string>
+            {
+                "exhaust",
+                "exhaust_2",
+                "exhaust_3",
+                "exhaust_4",
+                "exhaust_5",
+                "exhaust_6",
+                "exhaust_7",
+                "exhaust_8",
+                "exhaust_9",
+                "exhaust_10",
+                "exhaust_11",
+                "exhaust_12",
+                "exhaust_13",
+                "exhaust_14",
+                "exhaust_15",
+                "exhaust_16"
+            };
             isNitroOn = false;
             isSoundOn = false;
 
@@ -36,7 +54,13 @@ namespace AdvancedNitro
         {
             if (Game.Player.Character.IsSittingInVehicle() && Game.Player.Character.CurrentVehicle.IsToggleModOn(VehicleToggleMod.Turbo))
                 myNitroSystemEnabled = true;
-            else myNitroSystemEnabled = false;
+            else
+            {
+                isNitroOn = false;
+                isSoundOn = false;
+                myNitroAmount = 300.0f;
+                myNitroSystemEnabled = false;
+            }
 
             if (myNitroSystemEnabled)
             {
@@ -56,8 +80,8 @@ namespace AdvancedNitro
                                 if (Game.Player.Character.CurrentVehicle.HasBone(exhaust))
                                 {
                                     float scale = Game.Player.Character.CurrentVehicle.Speed / 50;
-                                    Vector3 offset = Game.Player.Character.CurrentVehicle.GetBoneCoord(Game.Player.Character.CurrentVehicle.GetBoneIndex(exhaust));
-                                    Vector3 exhPosition = Game.Player.Character.CurrentVehicle.GetOffsetFromWorldCoords(new Vector3(offset.X, offset.Y, offset.Z));
+                                    Vector3 offset = Game.Player.Character.CurrentVehicle.GetBoneCoord(exhaust);
+                                    Vector3 exhPosition = Game.Player.Character.CurrentVehicle.GetOffsetFromWorldCoords(offset);
                                     Function.Call(Hash._SET_PTFX_ASSET_NEXT_CALL, "core");
 
                                     if (Function.Call<bool>(Hash.START_PARTICLE_FX_NON_LOOPED_ON_ENTITY, "veh_backfire", Game.Player.Character.CurrentVehicle, exhPosition.X, exhPosition.Y, exhPosition.Z, 0.0f, pitch, 0.0f, scale, false, false, false))
@@ -98,15 +122,7 @@ namespace AdvancedNitro
 
         private void onKeyUp(Object sender, KeyEventArgs e)
         {
-            if (myNitroSystemEnabled)
-            {
-                if (myNitroSystemEnabled && e.KeyCode.Equals(Keys.ControlKey)) isNitroOn = false;
-            }
-        }
-
-        protected override void Dispose(bool A_0)
-        {
-            base.Dispose(A_0);
+            if (myNitroSystemEnabled && e.KeyCode.Equals(Keys.ControlKey)) isNitroOn = false;
         }
     }
 }
